@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ShivYog Matrimony (Demo)</title>
+<style>
+/* THEME: change these colours to match the portal exactly */
+:root{--primary:#E8761E;--primary-d:#C45A0A;--deep:#5B1A2B;--bg:#FFF8EF;--card:#FFFFFF;--ink:#2B2B2B;--mute:#6B6B6B;--line:#EBD9BF;--soft:#FBEBD3;--ok:#2E7D4F;--warn:#B3261E;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1D1416;--card:#2A1D20;--ink:#F3E9E4;--mute:#B9A9A3;--line:#4A3438;--soft:#38262A}}
+:root[data-theme="dark"]{--bg:#1D1416;--card:#2A1D20;--ink:#F3E9E4;--mute:#B9A9A3;--line:#4A3438;--soft:#38262A}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--deep);color:#fff;border-bottom:4px solid var(--primary)}
+.wrap{max-width:980px;margin:0 auto;padding:0 14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0}
+.brand{font-weight:700;font-size:19px;letter-spacing:.3px}.brand small{display:block;font-weight:400;font-size:11px;color:#F4C98B;letter-spacing:1px}
+nav{display:flex;gap:4px;overflow-x:auto;padding-bottom:0}
+nav button{background:none;border:0;color:#F4D9B0;padding:10px 12px;font:inherit;font-size:14px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+nav button.on{color:#fff;border-bottom-color:var(--primary);font-weight:600}
+.demo{background:var(--soft);border-bottom:1px solid var(--line);font-size:12.5px;color:var(--mute);text-align:center;padding:6px 10px}
+main{padding:18px 0 40px}
+h2{color:var(--deep);margin:0 0 4px;font-size:21px}@media (prefers-color-scheme:dark){h2{color:#F4C98B}}
+.sub{color:var(--mute);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--mute);margin:10px 0 3px}
+input,select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{background:var(--primary);color:#fff;border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--primary-d)}.btn.alt{background:none;color:var(--primary-d);border:1px solid var(--primary)}
+.btn.sm{padding:6px 11px;font-size:13px}.btn.red{background:none;color:var(--warn);border:1px solid var(--warn)}
+.btn[disabled]{opacity:.5;cursor:default}
+.m{display:flex;gap:12px}
+.av{flex:none;width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--deep));color:#fff;display:grid;place-items:center;font-weight:700;font-size:20px}
+.av.lock span{filter:blur(5px)}
+.score{margin-left:auto;text-align:center;flex:none}.score b{display:block;font-size:22px;color:var(--primary-d)}.score i{font-size:11px;color:var(--mute);font-style:normal}
+.tag{display:inline-block;background:var(--soft);border-radius:20px;padding:2px 9px;font-size:12px;margin:2px 3px 2px 0}
+.why{font-size:12.5px;color:var(--ok);margin:6px 0}
+.mute{color:var(--mute);font-size:13px}.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.contact{background:var(--soft);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:13.5px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--deep);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;z-index:9;max-width:90%}
+ul.p{padding-left:18px;margin:6px 0}ul.p li{margin:4px 0}
+.pill{font-size:12px;border-radius:20px;padding:2px 9px;background:var(--ok);color:#fff}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="top"><div class="brand">ShivYog Matrimony<small>VERIFIED. PRIVATE. SEVA.</small></div><div id="who" class="mute" style="color:#F4D9B0"></div></div><nav id="nav"></nav></div></header>
+<div class="demo">DEMO with sample (fictional) profiles. SYID check is simulated. No real data is sent anywhere.</div>
+<main class="wrap" id="app"></main>
+<script>
+var FORUMS=["Austin, USA","Dallas, USA","London, UK","Toronto, Canada","Mumbai, India","Delhi, India","Ahmedabad, India","Dubai, UAE","Sydney, Australia"];
+var EDU=["High school","Graduate","Postgraduate","Doctorate"],PRAC=["New to Shivyog","Regular sadhak","Dedicated sadhak","Seva leader"],VAL=["Traditional","Balanced","Modern"],DIET=["Vegetarian","Vegan","Eggetarian","Non-vegetarian"];
+var LANGS=["English","Hindi","Gujarati","Tamil","Telugu","Marathi","Punjabi","Bengali"];
+var SEED=[
+{id:1,n:"Ananya S.",g:"F",a:28,c:"Austin",k:"USA",l:["English","Hindi"],d:0,e:2,p:"Software engineer",pr:2,v:1,r:0,likes:true,rep:0},
+{id:2,n:"Kavya R.",g:"F",a:30,c:"London",k:"UK",l:["English","Tamil"],d:0,e:2,p:"Physician",pr:3,v:0,r:1,likes:false,rep:0},
+{id:3,n:"Meera P.",g:"F",a:26,c:"Mumbai",k:"India",l:["Hindi","Marathi","English"],d:0,e:1,p:"Designer",pr:1,v:2,r:1,likes:true,rep:0},
+{id:4,n:"Isha G.",g:"F",a:32,c:"Toronto",k:"Canada",l:["English","Gujarati","Hindi"],d:0,e:2,p:"Product manager",pr:2,v:1,r:1,likes:false,rep:0},
+{id:5,n:"Riya T.",g:"F",a:27,c:"Dallas",k:"USA",l:["English","Telugu"],d:2,e:1,p:"Teacher",pr:1,v:1,r:0,likes:false,rep:0},
+{id:6,n:"Sneha D.",g:"F",a:29,c:"Delhi",k:"India",l:["Hindi","English","Punjabi"],d:0,e:2,p:"Chartered accountant",pr:2,v:0,r:1,likes:true,rep:0},
+{id:7,n:"Arjun M.",g:"M",a:31,c:"Austin",k:"USA",l:["English","Hindi"],d:0,e:2,p:"Data scientist",pr:2,v:1,r:0,likes:true,rep:0},
+{id:8,n:"Rohan K.",g:"M",a:29,c:"London",k:"UK",l:["English","Gujarati"],d:0,e:2,p:"Architect",pr:1,v:2,r:1,likes:false,rep:0},
+{id:9,n:"Vikram J.",g:"M",a:34,c:"Mumbai",k:"India",l:["Hindi","Marathi","English"],d:0,e:3,p:"Professor",pr:3,v:0,r:1,likes:true,rep:0},
+{id:10,n:"Aditya N.",g:"M",a:27,c:"Dubai",k:"UAE",l:["English","Hindi","Telugu"],d:2,e:1,p:"Entrepreneur",pr:1,v:2,r:1,likes:false,rep:0},
+{id:11,n:"Karan B.",g:"M",a:33,c:"Toronto",k:"Canada",l:["English","Punjabi","Hindi"],d:0,e:2,p:"Civil engineer",pr:2,v:1,r:1,likes:false,rep:0},
+{id:12,n:"Neel A.",g:"M",a:30,c:"Sydney",k:"Australia",l:["English","Gujarati"],d:0,e:2,p:"Doctor",pr:2,v:1,r:1,likes:true,rep:2}];
+var KEY="sy_matri_demo_v1",S=load(),tab="home",step=1,tmp={};
+function load(){try{var x=localStorage.getItem(KEY);if(x)return JSON.parse(x)}catch(e){}return {me:null,int:{},rep:{},seed:{}}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function esc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function $(i){return document.getElementById(i)}
+function toast(m){var t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(function(){t.remove()},3200)}
+function opts(a,sel){return a.map(function(x,i){var v=typeof x==="string"&&a===FORUMS||a===LANGS?x:i;return '<option value="'+esc(v)+'"'+(String(v)===String(sel)?" selected":"")+'>'+esc(x)+'</option>'}).join("")}
+function score(me,c){
+ var s=0,why=[],p=me.pref||{},mn=+p.min||18,mx=+p.max||60;
+ if(c.a>=mn&&c.a<=mx){s+=25;why.push("Age in your range")}else if(c.a>=mn-2&&c.a<=mx+2)s+=12;
+ if(c.k===me.country){s+=15;why.push("Same country");if(c.c.toLowerCase()===String(me.city).toLowerCase()){s+=5;why.push("Same city")}}
+ else if(c.r||me.relocate){s+=10;why.push("Open to relocate")}
+ var common=c.l.filter(function(x){return(me.langs||[]).indexOf(x)>-1});if(common.length){s+=10;why.push("Shared language: "+common[0])}
+ if(+me.diet===c.d){s+=10;why.push("Same diet")}
+ var dp=Math.abs(+me.prac-c.pr);if(dp===0){s+=15;why.push("Similar spiritual practice")}else if(dp===1)s+=10;else if(dp===2)s+=5;
+ var dv=Math.abs(+me.val-c.v);if(dv===0){s+=10;why.push("Same family values")}else if(dv===1)s+=5;
+ if(Math.abs(+me.edu-c.e)<=1)s+=5;
+ if(p.diet!=="Any"&&p.diet!==undefined&&p.diet!==""&&+p.diet!==c.d)s=Math.max(0,s-15);
+ return {s:Math.min(100,Math.round(s/95*100)),why:why}}
+function cands(){var me=S.me;return SEED.filter(function(c){return c.g===me.seek&&!S.seed[c.id]&&(c.rep+(S.rep[c.id]||0))<3}).map(function(c){var r=score(me,c);return {c:c,s:r.s,why:r.why}}).sort(function(a,b){return b.s-a.s})}
+function nav(){var t=S.me&&S.me.ok?[["home","Matches"],["conn","Connections"],["prof","My profile"],["priv","Privacy & safety"]]:[["home","Join"],["priv","Privacy & safety"]];
+ $("nav").innerHTML=t.map(function(x){return '<button class="'+(tab===x[0]?"on":"")+'" onclick="go(\''+x[0]+'\')">'+x[1]+'</button>'}).join("");
+ $("who").innerHTML=S.me&&S.me.ok?'<span class="pill">SYID verified</span> '+esc(S.me.syid):""}
+function go(t){tab=t;render()}
+function render(){nav();var v=!S.me||!S.me.ok?(tab==="priv"?priv():join()):tab==="priv"?priv():!S.me.name?profForm():tab==="conn"?conn():tab==="prof"?profForm():matches();$("app").innerHTML=v;window.scrollTo(0,0)}
+function join(){
+ if(step===1)return '<h2>Join with your SYID</h2><p class="sub">Only verified Shivyogis can enter. No SYID, no entry.</p><div class="card" style="max-width:480px"><label>SYID</label><input id="syid" placeholder="e.g. SY123456" maxlength="14"><label>Your ShivYog forum</label><select id="forum">'+opts(FORUMS)+'</select><label>Registered email</label><input id="email" type="email" placeholder="name@example.com"><div class="acts"><button class="btn" onclick="sendCode()">Send verification code</button></div><p class="mute">Production: SYID, forum and registered email or phone are checked against the SY portal. Here the check is simulated.</p></div>';
+ return '<h2>Enter your code</h2><p class="sub">A one-time code was sent to '+esc(tmp.email)+'. Demo code: <b>123456</b></p><div class="card" style="max-width:480px"><label>One-time code</label><input id="code" maxlength="6" inputmode="numeric"><label style="display:flex;gap:8px;align-items:flex-start;font-weight:400;color:var(--ink)"><input id="cons" type="checkbox" style="width:auto;margin-top:4px"><span>I consent to use this platform only for a genuine marriage search, as per SY Protocols, and accept the community rules (no money requests, respectful conduct).</span></label><div class="acts"><button class="btn" onclick="verify()">Verify and continue</button><button class="btn alt" onclick="step=1;render()">Back</button></div></div>'}
+function sendCode(){var s=$("syid").value.trim().toUpperCase(),e=$("email").value.trim();
+ if(!/^[A-Z0-9]{5,14}$/.test(s))return toast("Enter a valid SYID (5 to 14 letters or digits)");
+ if(!/^\S+@\S+\.\S+$/.test(e))return toast("Enter a valid email");
+ tmp={syid:s,forum:$("forum").value,email:e};step=2;render();toast("Demo code: 123456")}
+function verify(){if($("code").value!=="123456")return toast("Incorrect code. Demo code is 123456");
+ if(!$("cons").checked)return toast("Please accept the consent to continue");
+ S.me={ok:true,syid:tmp.syid,forum:tmp.forum,email:tmp.email,seek:"M",pref:{min:24,max:36,diet:"Any"}};save();step=1;tab="prof";render();toast("SYID verified")}
+function profForm(){var m=S.me;
+ return '<h2>'+(m.name?"My profile":"Create your profile")+'</h2><p class="sub">Structured fields only, so there is nothing to moderate. Only first name and last initial are shown to others.</p><div class="card"><div class="row"><div><label>Name (first name and last initial)</label><input id="f_n" value="'+esc(m.name)+'" placeholder="e.g. Priya S."></div><div><label>Age</label><input id="f_a" type="number" min="18" max="70" value="'+esc(m.age||"")+'"></div></div>'+
+ '<div class="row"><div><label>I am</label><select id="f_g"><option value="F"'+(m.g==="F"?" selected":"")+'>Woman</option><option value="M"'+(m.g==="M"?" selected":"")+'>Man</option></select></div><div><label>Looking for</label><select id="f_s"><option value="M"'+(m.seek==="M"?" selected":"")+'>Man</option><option value="F"'+(m.seek==="F"?" selected":"")+'>Woman</option></select></div></div>'+
+ '<div class="row"><div><label>City</label><input id="f_c" value="'+esc(m.city||"")+'"></div><div><label>Country</label><input id="f_k" value="'+esc(m.country||"")+'" placeholder="USA, UK, India..."></div></div>'+
+ '<div class="row"><div><label>Languages (hold Ctrl or Cmd for several)</label><select id="f_l" multiple size="4">'+LANGS.map(function(x){return '<option'+((m.langs||[]).indexOf(x)>-1?" selected":"")+'>'+x+'</option>'}).join("")+'</select></div><div><label>Diet</label><select id="f_d">'+opts(DIET,m.diet||0)+'</select><label>Education</label><select id="f_e">'+opts(EDU,m.edu||1)+'</select></div></div>'+
+ '<div class="row"><div><label>Profession</label><input id="f_p" value="'+esc(m.prof||"")+'"></div><div><label>Spiritual practice</label><select id="f_pr">'+opts(PRAC,m.prac||1)+'</select></div></div>'+
+ '<div class="row"><div><label>Family values</label><select id="f_v">'+opts(VAL,m.val||1)+'</select></div><div><label>Open to relocate</label><select id="f_r"><option value="1"'+(m.relocate?" selected":"")+'>Yes</option><option value="0"'+(m.relocate?"":" selected")+'>No</option></select></div></div>'+
+ '<h2 style="margin-top:16px;font-size:17px">Partner preferences</h2><div class="row"><div><label>Age from</label><input id="f_mn" type="number" value="'+esc(m.pref.min)+'"></div><div><label>Age to</label><input id="f_mx" type="number" value="'+esc(m.pref.max)+'"></div></div><label>Partner diet</label><select id="f_pd"><option value="Any">Any</option>'+DIET.map(function(x,i){return '<option value="'+i+'"'+(String(m.pref.diet)===String(i)?" selected":"")+'>'+x+'</option>'}).join("")+'</select>'+
+ '<div class="acts"><button class="btn" onclick="saveProf()">Save and see matches</button></div></div>'}
+function saveProf(){var m=S.me,n=$("f_n").value.trim(),a=+$("f_a").value;
+ if(!n||!(a>=18)||!$("f_c").value.trim()||!$("f_k").value.trim())return toast("Please fill name, age (18+), city and country");
+ var l=[].slice.call($("f_l").selectedOptions).map(function(o){return o.value});
+ m.name=n;m.age=a;m.g=$("f_g").value;m.seek=$("f_s").value;m.city=$("f_c").value.trim();m.country=$("f_k").value.trim();m.langs=l;m.diet=+$("f_d").value;m.edu=+$("f_e").value;m.prof=$("f_p").value.trim();m.prac=+$("f_pr").value;m.val=+$("f_v").value;m.relocate=$("f_r").value==="1";
+ m.pref={min:+$("f_mn").value||18,max:+$("f_mx").value||60,diet:$("f_pd").value};save();tab="home";render();toast("Profile saved")}
+function card(x,mode){var c=x.c,st=S.int[c.id],mu=st==="mutual";
+ var h='<div class="card"><div class="m"><div class="av'+(mu?"":" lock")+'"><span>'+esc(c.n.charAt(0))+'</span></div><div><b>'+esc(c.n)+'</b>, '+c.a+'<div class="mute">'+esc(c.p)+' | '+esc(c.c)+', '+esc(c.k)+'</div></div>'+(x.s!=null?'<div class="score"><b>'+x.s+'%</b><i>match</i></div>':"")+'</div>'+
+ '<div style="margin-top:8px"><span class="tag">'+DIET[c.d]+'</span><span class="tag">'+EDU[c.e]+'</span><span class="tag">'+PRAC[c.pr]+'</span><span class="tag">'+VAL[c.v]+'</span><span class="tag">'+esc(c.l.join(", "))+'</span></div>'+
+ (x.why&&x.why.length?'<div class="why">Why: '+esc(x.why.join(" | "))+'</div>':"")+
+ (mu?'<div class="contact"><b>Mutual interest.</b> Photo and contact now shared (demo data):<br>Email: '+esc(c.n.split(" ")[0].toLowerCase())+'.demo@example.com | Phone: +00 000 000 '+(1000+c.id)+'<br><span class="mute">Please connect respectfully, with your families, as per SY Protocols.</span></div>':'<div class="mute">Photo and contact are shared only after mutual interest.</div>')+
+ '<div class="acts">'+(mu?"":st==="sent"?'<button class="btn sm" disabled>Interest sent</button><button class="btn sm alt" onclick="simReply('+c.id+')">Demo: simulate their acceptance</button>':'<button class="btn sm" onclick="like('+c.id+')">Send interest</button>')+'<button class="btn sm red" onclick="report('+c.id+')">Report</button></div></div>';return h}
+function matches(){var l=cands();
+ return '<h2>Your best matches</h2><p class="sub">Ranked by an open, rule-based compatibility score. '+(S.me.paused?'<b>Your profile is paused (matched). Others cannot see you.</b>':'')+'</p>'+(l.length?'<div class="grid">'+l.map(function(x){return card(x)}).join("")+'</div>':'<div class="card">No matches to show right now. Try widening your preferences.</div>')}
+function like(id){var c=SEED.filter(function(x){return x.id===id})[0];S.int[id]=c.likes?"mutual":"sent";save();render();toast(c.likes?"It is a mutual interest! Contact unlocked.":"Interest sent")}
+function simReply(id){S.int[id]="mutual";save();render();toast("Mutual interest. Contact unlocked.")}
+function report(id){S.rep[id]=(S.rep[id]||0)+1;save();var c=SEED.filter(function(x){return x.id===id})[0];
+ if(c.rep+S.rep[id]>=3){toast("Hidden automatically after 3 reports from verified members")}else toast("Reported. "+(3-c.rep-S.rep[id])+" more report(s) will hide this profile automatically");render()}
+function conn(){var ids=Object.keys(S.int);var l=ids.map(function(i){var c=SEED.filter(function(x){return x.id==i})[0];return {c:c,why:[]}});
+ return '<h2>Connections</h2><p class="sub">Interests you have sent and mutual connections.</p>'+(l.length?'<div class="grid">'+l.map(function(x){return card({c:x.c,s:null,why:[]})}).join("")+'</div>':'<div class="card">No connections yet. Send an interest from your matches.</div>')}
+function priv(){return '<h2>Privacy and safety</h2><p class="sub">Built in by design, not added later.</p><div class="card"><ul class="p"><li><b>Verified only:</b> every member is checked through SYID and forum. No anonymous or public profiles.</li><li><b>Minimal data:</b> no government ID, income proof or bank details. Only first name and last initial are visible.</li><li><b>Consent-based sharing:</b> photo and contact details unlock only after mutual interest.</li><li><b>No search-engine listing</b>; profiles are visible only to verified members.</li><li><b>Self-moderating:</b> a profile with 3 reports from verified members is hidden automatically; repeats are suspended. Inactive profiles hide after 90 days.</li><li><b>Rules:</b> as per SY Protocols; adults of legal marriageable age only; no money transactions or requests.</li><li><b>Your data, your control:</b> pause, download or delete at any time.</li></ul></div>'+(S.me&&S.me.ok?'<div class="card"><b>Your controls</b><div class="acts"><button class="btn sm alt" onclick="pause()">'+(S.me.paused?"Resume":"Mark as matched / pause")+' profile</button><button class="btn sm alt" onclick="dl()">Show my data</button><button class="btn sm red" onclick="del()">Delete my data</button></div><pre id="dump" class="mute" style="white-space:pre-wrap;font-size:12px"></pre></div>':"")}
+function pause(){S.me.paused=!S.me.paused;save();render();toast(S.me.paused?"Profile paused":"Profile resumed")}
+function dl(){$("dump").textContent=JSON.stringify(S.me,null,1)}
+function del(){if(!confirm("Delete all your demo data?"))return;S={me:null,int:{},rep:{},seed:{}};save();step=1;tab="home";render();toast("All data deleted")}
+render();
+</script>
+</body>
+</html>
